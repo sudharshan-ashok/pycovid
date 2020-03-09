@@ -2,10 +2,18 @@
 
 The PyCOVID package provides a Pandas Dataframe of the 2019 Novel Coronavirus COVID-19 (2019-nCoV) epidemic based on Rami Krispin's 'coronavirus' package in R. The raw data pulled from the Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus
 
-<img src="img/covid.jfif" width="65%" align="center"/></a>
+<img src="img/covid.jfif" width="100%" align="center"/></a>
+
+### Quick Installation
 
 ```py
 pip install pycovid
+```
+### Importing
+
+```py
+from pycovid import pycovid
+pycovid.getCovidCases()
 ```
 
 ## Value Addition
@@ -29,7 +37,7 @@ Parameters:
 3. casetype: Python List of Case Types ('confirmed', 'death' and 'recovered' and Default is all) 
 4. cumsum: Gets cumulative sums of cases for each country in list (Default: False)
 
-<img src="img/cumsumwide.PNG" width="65%" align="center"/></a>
+<img src="img/cumsumwide.PNG" width="100%" align="center"/></a>
 
 getCovidCases() : Get the Rami Krispin Coronavirus Dataset in the original format
 Parameters: 
@@ -37,7 +45,7 @@ Parameters:
 2. start_date and end_date: Use these to set the time window you wish to access
 3. casetype: Python List of Case Types ('confirmed', 'death' and 'recovered' and Default is all) 
 
-<img src="img/long.PNG" width="65%" align="center"/></a>
+<img src="img/long.PNG" width="100%" align="center"/></a>
 
 plotCountries(): Plot the country aggregates on world map using Plotly
 Parameters:
@@ -45,30 +53,34 @@ Parameters:
 2. grouped_date: Boolean to indicate whether dataset has been aggregated at country level or not
 3. metric: Can be 'confirmed' or 'death' or 'recovered'
 
-<img src="img/world.PNG" width="65%" align="center"/></a>
+<img src="img/world.PNG" width="100%" align="center"/></a>
 
 getIntervalData(): Get resampled dataset of the Coronavirus based on the date (by default Monthly level)
 1. df: Pass a wide dataframe to the function
 2. interval: The time interval you wish to resample the dataset to: 1D = Daily, 1W: Weekly, 1M: Monthly
 
-<img src="img/timeinterval.PNG" width="65%" align="center"/></a>
+<img src="img/timeinterval.PNG" width="100%" align="center"/></a>
 
 Installation
 ------------
-
 ```py
 pip install pycovid
 ```
+```py
+from pycovid import pycovid
+pycovid.getCovidCases()
+```
 
 Requirements
-^^^^^^^^^^^^
+------------
 Pandas, Numpy and Plotly
+
+Authors
+-------
+PyCOVID was written by Sudharshan Ashok <sudharshan93@gmail.com>
 
 Licence
 -------
 MIT License
 
-Authors
--------
 
-PyCOVID was written by Sudharshan Ashok <sudharshan93@gmail.com>
