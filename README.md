@@ -30,7 +30,7 @@ The 'coronavirus' R package gets access to data, but the 'pyCOVID' package built
 Usage
 -----
 
-getCovidCasesWide() : Get the wide version of the Coronavirus Dataset
+**getCovidCasesWide()** : Get the wide version of the Coronavirus Dataset
 Parameters: 
 1. Countries: List of Countries (Default: All Countries)
 2. start_date and end_date: Use these to set the time window you wish to access
@@ -39,7 +39,7 @@ Parameters:
 
 <img src="img/cumsumwide.PNG" width="100%" align="center"/></a>
 
-getCovidCases() : Get the Rami Krispin Coronavirus Dataset in the original format
+**getCovidCases()** : Get the Rami Krispin Coronavirus Dataset in the original format
 Parameters: 
 1. Countries: List of Countries (Default: All Countries)
 2. start_date and end_date: Use these to set the time window you wish to access
@@ -47,7 +47,7 @@ Parameters:
 
 <img src="img/long.PNG" width="100%" align="center"/></a>
 
-plotCountries(): Plot the country aggregates on world map using Plotly
+**plotCountries()**: Plot the country aggregates on world map using Plotly
 Parameters:
 1. df: Pass a wide dataframe to the function with country-wise aggregates on confirmed, death and recovered cases
 2. grouped_date: Boolean to indicate whether dataset has been aggregated at country level or not
@@ -55,7 +55,7 @@ Parameters:
 
 <img src="img/world.PNG" width="100%" align="center"/></a>
 
-getIntervalData(): Get resampled dataset of the Coronavirus based on the date (by default Monthly level)
+**getIntervalData()**: Get resampled dataset of the Coronavirus based on the date (by default Monthly level)
 1. df: Pass a wide dataframe to the function
 2. interval: The time interval you wish to resample the dataset to: 1D = Daily, 1W: Weekly, 1M: Monthly
 
