@@ -154,8 +154,7 @@ def plot_provinces(countries=None, provinces=None, start_date=None, end_date=Non
 
 
     df = getCovidCases(countries = countries, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
-    df["new"] = df["cases"]/14446515;
-    fig = px.line(df, x="date", y="new", color='province_state', title="Number of confirmed COVID-19 cases over time")
+    fig = px.line(df, x="date", y="cases", color='province_state', title="Number of confirmed COVID-19 cases over time")
     fig.show()
 
     
