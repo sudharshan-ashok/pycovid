@@ -130,7 +130,7 @@ def plot_countries(df=None, grouped_data=False, metric="confirmed"):
         df = df.groupby(['country_region', 'alpha-3']).sum().reset_index()
         
     fig = px.choropleth(df, locations="alpha-3",
-                    color="confirmed", # lifeExp is a column of gapminder
+                    color=metric, # lifeExp is a column of gapminder
                     hover_name="country_region", # column to add to hover information
                     color_continuous_scale="OrRd")
     fig.show()
