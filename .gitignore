@@ -37,3 +37,6 @@ nosetests.xml
 
 # venv
 /venv/*
+
+#mac
+.DS_Store
