@@ -66,13 +66,13 @@ Parameters:
 from pycovid import pycovid
 
 pycovid.plot_provinces(contries=['Canada'], 
-						provinces=['Alberta', 'Ontario', 'Quebec', 
-								'Manitoba', 'British Columbia', 
-								'New Brunswick', 'Saskatchewan'], 
-						casetype=['confirmed'], start_date="2020-02-20")
+			provinces=['Alberta', 'Ontario', 'Quebec', 
+				'Manitoba', 'British Columbia', 
+				'New Brunswick', 'Saskatchewan'], 
+			casetype=['confirmed'], start_date="2020-02-20")
 ```
 
-<img src="img/province.PNG" width="100%" align="center"/></a>
+<img src="img/province.png" width="50%" align="center"/></a>
 
 **getIntervalData()**: Get resampled dataset of the Coronavirus based on the date (by default Monthly level)
 1. df: Pass a wide dataframe to the function
