@@ -136,7 +136,7 @@ def plot_countries(df=None, grouped_data=False, metric="confirmed"):
     fig.show()
     
 
-def plot_provinces(provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered']):
+def plot_provinces(countries=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered']):
     
     # populations =   Ontario   14,446,515  
     #                 Quebec  8,433,301   
@@ -153,7 +153,7 @@ def plot_provinces(provinces=None, start_date=None, end_date=None, casetype=['co
     #                 Nunavut 38,787
 
 
-    df = getCovidCases(countries = ['Canada'], provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
+    df = getCovidCases(countries = countries, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
     df["new"] = df["cases"]/14446515;
     fig = px.line(df, x="date", y="new", color='province_state', title="Number of confirmed COVID-19 cases over time")
     fig.show()
