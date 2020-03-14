@@ -72,7 +72,7 @@ pycovid.plot_provinces(contries=['Canada'],
 			casetype=['confirmed'], start_date="2020-02-20")
 ```
 
-<img src="img/province.png" width="50%" align="center"/></a>
+<img src="img/province.png" width="100%" align="center"/></a>
 
 **getIntervalData()**: Get resampled dataset of the Coronavirus based on the date (by default Monthly level)
 1. df: Pass a wide dataframe to the function
