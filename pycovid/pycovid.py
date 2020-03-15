@@ -134,7 +134,7 @@ def plot_countries(df=None, grouped_data=False, metric="confirmed"):
     fig.show()
     
 
-def plot_provinces(countries=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered']):
+def plot_provinces(countries=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], plottype="linear"):
     
     province_populations = { 'Ontario': 14446515,  
                     'Quebec': 8433301,   
@@ -166,7 +166,8 @@ def plot_provinces(countries=None, provinces=None, start_date=None, end_date=Non
         yaxis_title="cases per 100,000 people",
         yaxis = dict(
             showexponent = 'all',
-            exponentformat = 'e'
+            exponentformat = 'e',
+            type = plottype
         ),
         xaxis = {
             'tickformat': '%m-%d',
