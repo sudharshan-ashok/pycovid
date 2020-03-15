@@ -61,6 +61,7 @@ Parameters:
 2. provinces - include names of any states or provinces
 3. start_date and end_date: as above
 4. casetype: as above
+5. plottype: "log" or "linear"
 
 ```py
 from pycovid import pycovid
@@ -69,7 +70,7 @@ pycovid.plot_provinces(contries=['Canada'],
 			provinces=['Alberta', 'Ontario', 'Quebec', 
 				'Manitoba', 'British Columbia', 
 				'New Brunswick', 'Saskatchewan'], 
-			casetype=['confirmed'], start_date="2020-02-20")
+			casetype=['confirmed'], start_date="2020-02-20", plottype="linear")
 ```
 
 <img src="img/province.png" width="100%" align="center"/></a>
