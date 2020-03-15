@@ -33,7 +33,6 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
     iso_df = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.csv')
     iso_df = iso_df[['name', 'alpha-3']]
     iso_df.loc[iso_df.name=="United States of America", 'name'] = 'US'
-    iso_df.loc[iso_df.name=="China", 'name'] = 'Mainland China'
     iso_df.loc[iso_df.name=="United Kingdom", 'name'] = 'UK'
     iso_df.loc[iso_df.name=="Russian Federation", 'name'] = 'Russia'
     iso_df.loc[iso_df.name=="Korea, Republic of", 'name'] = 'South Korea'
@@ -92,7 +91,6 @@ def getCovidCasesWide(countries=None, start_date=None, end_date=None, casetype=[
     iso_df = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.csv')
     iso_df = iso_df[['name', 'alpha-3']]
     iso_df.loc[iso_df.name=="United States of America", 'name'] = 'US'
-    iso_df.loc[iso_df.name=="China", 'name'] = 'China'
     iso_df.loc[iso_df.name=="United Kingdom", 'name'] = 'UK'
     iso_df.loc[iso_df.name=="Russian Federation", 'name'] = 'Russia'
     iso_df.loc[iso_df.name=="Korea, Republic of", 'name'] = 'South Korea'
