@@ -56,9 +56,23 @@ Parameters:
 
 <img src="img/world.PNG" width="100%" align="center"/></a>
 
-**plotProvinces()**: Plot the values from provinces within a country over time
+**plot_countries_trend()**: Plot the cummultive trends over time for countries. Currently doesn't work for any countries with provinces/states (US, Canada, Australia, France).
+1. countries - list of country names
+2. start_date
+3. end_date 
+4. casetype as above,
+5. plottype - linear or log
+
+```py
+from pycovid import pycovid
+
+pycovid.plot_countries_trend(countries=['Iran', 'Italy', 'Spain', 'Portugal', 'Japan', 'Germany', 'Mexico'],
+			casetype=['confirmed'], start_date="2020-01-01", plottype="linear")
+```
+
+**plotProvinces()**: Plot the values from provinces within a country (tested for australia, US, Canada) over time
 1. countries - just include one
-2. provinces - include names of any states or provinces
+2. provinces - optional, include names of any states or provinces, otherwise plots all
 3. start_date and end_date: as above
 4. casetype: as above
 5. plottype: "log" or "linear"

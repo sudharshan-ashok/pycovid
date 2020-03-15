@@ -18,18 +18,16 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
             if province not in df.province_state.values:
                 print("Province: {0} not found in database. Check spelling!".format(province))
             df = df[(df.province_state.isin(provinces))] 
-            
+
     if countries is not None:
         for country in countries:
             if country not in df.country_region.values:
                 print("Country: {0} not found in database. Check spelling!".format(country))
             df =  df[(df.country_region.isin(countries))]
-
+        
     if cumsum is True:
-        df.cases = df.groupby('province_state')['cases'].transform(pd.Series.cumsum)
-            
+        df.cases = df.groupby('province_state')['cases'].transform(pd.Series.cumsum)   
 
-            
     iso_df = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.csv')
     iso_df = iso_df[['name', 'alpha-3']]
     iso_df.loc[iso_df.name=="United States of America", 'name'] = 'US'
@@ -134,33 +132,50 @@ def plot_countries(df=None, grouped_data=False, metric="confirmed"):
     fig.show()
     
 
-def plot_provinces(countries=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], plottype="linear"):
+
+
+def plot_countries_trend(countries=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], plottype="linear"):
     
-    province_populations = { 'Ontario': 14446515,  
-                    'Quebec': 8433301,   
-                    'British Columbia': 5020302,   
-                    'Alberta': 4345737,   
-                    'Manitoba': 1360396,   
-                    'Saskatchewan': 1168423,   
-                    'Nova Scotia': 965382, 
-                    'New Brunswick': 772094, 
-                    'Newfoundland': 523790, 
-                    'Prince Edward Island': 154748, 
-                    'Northwest Territory': 44598,  
-                    'Yukon': 40369,  
-                    'Nunavut': 38787
-                    };
+  # load in populations 
 
-
-
-    df = getCovidCases(countries=countries, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
-    
-    if provinces is not None:
-        for province in provinces:
-            print(province)
-            df.loc[df.province_state == province, 'cases'] = (df.loc[df.province_state == province, 'cases'] / province_populations[province]) * 100000
+    df = getCovidCases(countries=countries,  casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
              
-    fig = px.line(df, x="date", y="cases", color='province_state', title="Number of confirmed COVID-19 cases over time per 100,000 Canadians")
+    fig = px.line(df, x="date", y="cases", color='alpha-3', title="Number of confirmed COVID-19 cases over time")
+
+    fig.update_layout(
+        yaxis_title="cases",
+        yaxis = dict(
+            showexponent = 'all',
+            exponentformat = 'e',
+            type = plottype
+        ),
+        xaxis = {
+            'tickformat': '%m-%d',
+            'tickmode': 'auto',
+            'nticks': 30, 
+            'tick0': start_date,
+        }
+    )
+
+    fig.show()
+
+
+
+def plot_provinces(country=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], plottype="linear"):
+    
+    df = pd.read_csv(country[0] + '_StatePop_19.csv', names=["state", 'population'], skiprows=0)
+    province_populations = df.set_index('state').T.to_dict('records')[0]
+
+    df = getCovidCases(countries=country, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
+    
+    if provinces is None:
+        provinces = np.unique(df.province_state)
+
+    for province in provinces:
+        print(province)
+        df.loc[df.province_state == province, 'cases'] = (df.loc[df.province_state == province, 'cases'] / province_populations[province]) * 100000
+
+    fig = px.line(df, x="date", y="cases", color='province_state', title="Number of confirmed COVID-19 cases over time per 100,000 Citizens")
 
     fig.update_layout(
         yaxis_title="cases per 100,000 people",
