@@ -138,23 +138,47 @@ def plot_countries(df=None, grouped_data=False, metric="confirmed"):
 
 def plot_provinces(countries=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered']):
     
-    # populations =   Ontario   14,446,515  
-    #                 Quebec  8,433,301   
-    #                 British Columbia    5,020,302   
-    #                 Alberta 4,345,737   
-    #                 Manitoba    1,360,396   
-    #                 Saskatchewan    1,168,423   
-    #                 Nova Scotia 965,382 
-    #                 New Brunswick   772,094 
-    #                 Newfoundland    523,790 
-    #                 Prince Edward Island    154,748 
-    #                 Northwest Territory 44,598  
-    #                 Yukon   40,369  
-    #                 Nunavut 38,787
+    province_populations = { 'Ontario': 14446515,  
+                    'Quebec': 8433301,   
+                    'British Columbia': 5020302,   
+                    'Alberta': 4345737,   
+                    'Manitoba': 1360396,   
+                    'Saskatchewan': 1168423,   
+                    'Nova Scotia': 965382, 
+                    'New Brunswick': 772094, 
+                    'Newfoundland': 523790, 
+                    'Prince Edward Island': 154748, 
+                    'Northwest Territory': 44598,  
+                    'Yukon': 40369,  
+                    'Nunavut': 38787
+                    };
+
 
 
     df = getCovidCases(countries=countries, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
-    fig = px.line(df, x="date", y="cases", color='province_state', title="Number of confirmed COVID-19 cases over time")
+    
+    if provinces is not None:
+        for province in provinces:
+            print(province)
+            df.loc[df.province_state == province, 'cases'] = (df.loc[df.province_state == province, 'cases'] / province_populations[province]) * 100000
+             
+    fig = px.line(df, x="date", y="cases", color='province_state', title="Number of confirmed COVID-19 cases over time per 100,000 Canadians")
+
+    fig.update_layout(
+        yaxis_title="cases per 100,000 people",
+        yaxis = dict(
+            showexponent = 'all',
+            exponentformat = 'e'
+        ),
+        xaxis = {
+            'tickformat': '%m-%d',
+            'tickmode': 'auto',
+            'nticks': 30, 
+            'tick0': start_date,
+        }
+    
+    )
+
     fig.show()
 
     
