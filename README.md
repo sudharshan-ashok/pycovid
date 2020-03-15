@@ -42,8 +42,9 @@ Parameters:
 **getCovidCases()** : Get the Rami Krispin Coronavirus Dataset in the original format
 Parameters: 
 1. Countries: List of Countries (Default: All Countries)
-2. start_date and end_date: Use these to set the time window you wish to access
-3. casetype: Python List of Case Types ('confirmed', 'death' and 'recovered' and Default is all) 
+2. Provinces: List of Provinces and States (Default: All)
+3. start_date and end_date: Use these to set the time window you wish to access
+4. casetype: Python List of Case Types ('confirmed', 'death' and 'recovered' and Default is all) 
 
 <img src="img/long.PNG" width="100%" align="center"/></a>
 
@@ -54,6 +55,24 @@ Parameters:
 3. metric: Can be 'confirmed' or 'death' or 'recovered'
 
 <img src="img/world.PNG" width="100%" align="center"/></a>
+
+**plotProvinces()**: Plot the values from provinces within a country over time
+1. countries - just include one
+2. provinces - include names of any states or provinces
+3. start_date and end_date: as above
+4. casetype: as above
+
+```py
+from pycovid import pycovid
+
+pycovid.plot_provinces(contries=['Canada'], 
+			provinces=['Alberta', 'Ontario', 'Quebec', 
+				'Manitoba', 'British Columbia', 
+				'New Brunswick', 'Saskatchewan'], 
+			casetype=['confirmed'], start_date="2020-02-20")
+```
+
+<img src="img/province.png" width="100%" align="center"/></a>
 
 **getIntervalData()**: Get resampled dataset of the Coronavirus based on the date (by default Monthly level)
 1. df: Pass a wide dataframe to the function
@@ -69,6 +88,17 @@ pip install pycovid
 ```py
 from pycovid import pycovid
 pycovid.getCovidCases()
+```
+or with virtual environment
+
+```bash
+# Configure a virtual environment in project directory
+python3 -m venv venv 
+# Activate the environment (assign paths)
+source venv/bin/activate 
+# Upgrade Pip and install requirements
+pip install --upgrade pip 
+pip install pycovid
 ```
 
 Requirements
