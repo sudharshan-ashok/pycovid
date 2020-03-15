@@ -121,7 +121,7 @@ def getIntervalData(df, interval='30D'):
 
 def plot_countries(df=None, grouped_data=False, metric="confirmed"):
     
-    if df == None:
+    if df is None:
         df = getCovidCasesWide()
    
     if grouped_data == False:
