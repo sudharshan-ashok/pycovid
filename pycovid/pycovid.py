@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 
-def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], cumsum=False):
+def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], cumsum=False, plotprovinces=False):
     df = pd.read_csv('https://raw.githubusercontent.com/RamiKrispin/coronavirus-csv/master/coronavirus_dataset.csv',
             names=["province_state", 'country_region', 'lat', 'long', 'date', 'cases', 'type'], skiprows=1, parse_dates=['date'])
     
@@ -26,7 +26,10 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
             df =  df[(df.country_region.isin(countries))]
         
     if cumsum is True:
-        df.cases = df.groupby('province_state')['cases'].transform(pd.Series.cumsum)   
+        if plotprovinces:
+            df.cases = df.groupby('province_state')['cases'].transform(pd.Series.cumsum)   
+        else: 
+            df.cases = df.groupby('country_region')['cases'].transform(pd.Series.cumsum)
 
     iso_df = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.csv')
     iso_df = iso_df[['name', 'alpha-3']]
@@ -140,7 +143,7 @@ def plot_countries_trend(countries=None, start_date=None, end_date=None, casetyp
 
     df = getCovidCases(countries=countries,  casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
              
-    fig = px.line(df, x="date", y="cases", color='alpha-3', title="Number of confirmed COVID-19 cases over time")
+    fig = px.line(df, x="date", y="cases", color='name', title="Number of confirmed COVID-19 cases over time")
 
     fig.update_layout(
         yaxis_title="cases",
@@ -166,7 +169,7 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
     df = pd.read_csv(country[0] + '_StatePop_19.csv', names=["state", 'population'], skiprows=0)
     province_populations = df.set_index('state').T.to_dict('records')[0]
 
-    df = getCovidCases(countries=country, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
+    df = getCovidCases(countries=country, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True, plotprovinces=True)
     
     if provinces is None:
         provinces = np.unique(df.province_state)
