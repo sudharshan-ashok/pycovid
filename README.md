@@ -45,6 +45,8 @@ Parameters:
 2. Provinces: List of Provinces and States (Default: All)
 3. start_date and end_date: Use these to set the time window you wish to access
 4. casetype: Python List of Case Types ('confirmed', 'death' and 'recovered' and Default is all) 
+5. cumsum: gets cummulative sum for each country or province
+5. plotprovinces: default is false, if True it cumsums over provinces instead of countries
 
 <img src="img/long.PNG" width="100%" align="center"/></a>
 
