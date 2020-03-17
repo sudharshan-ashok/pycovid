@@ -4,6 +4,9 @@ The PyCOVID package provides a Pandas Dataframe of the 2019 Novel Coronavirus CO
 
 <img src="img/covid.jfif" width="100%" align="center"/></a>
 
+## Try in a collaboratory iPython notebook
+<a href="https://colab.research.google.com/github/kylemath/pycovid/blob/master/notebooks/PyCovid_Example_Notebook.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
+
 ### Quick Installation
 
 ```py
