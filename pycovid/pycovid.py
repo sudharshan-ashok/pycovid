@@ -13,12 +13,6 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
     if end_date is not None:
         df = df[df.date <= end_date]
 
-    if provinces is not None:
-        for province in provinces:
-            if province not in df.province_state.values:
-                print("Province: {0} not found in database. Check spelling!".format(province))
-            df = df[(df.province_state.isin(provinces))] 
-
     if countries is not None:
         for country in countries:
             if country not in df.country_region.values:
@@ -36,7 +30,6 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
     iso_df.loc[iso_df.name=="United States of America", 'name'] = 'US'
     iso_df.loc[iso_df.name=="United Kingdom", 'name'] = 'UK'
     iso_df.loc[iso_df.name=="Russian Federation", 'name'] = 'Russia'
-    iso_df.loc[iso_df.name=="Korea, Republic of", 'name'] = 'South Korea'
     iso_df.loc[iso_df.name=="Macao", 'name'] = 'Macau'
     iso_df.loc[iso_df.name=="Taiwan, Province of China", 'name'] = 'Taiwan'
     iso_df.loc[iso_df.name=="Viet Nam", 'name'] = 'Vietnam'
@@ -49,7 +42,7 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
     iso_df.loc[iso_df.name=="Holy See", 'name'] = 'Vatican City'
                
     df = pd.merge(df, iso_df, left_on="country_region", right_on='name')
-    
+    print(df)
     return df
 
 def getCovidCasesWide(countries=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], cumsum=False):
@@ -142,7 +135,7 @@ def plot_countries_trend(countries=None, start_date=None, end_date=None, casetyp
   # load in populations 
 
     df = getCovidCases(countries=countries,  casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
-             
+
     fig = px.line(df, x="date", y="cases", color='name', title="Number of confirmed COVID-19 cases over time")
 
     fig.update_layout(
