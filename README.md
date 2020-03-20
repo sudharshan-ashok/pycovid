@@ -80,7 +80,9 @@ pycovid.plot_countries_trend(countries=['Iran', 'Italy', 'Spain', 'Portugal', 'J
 2. provinces - optional, include names of any states or provinces, otherwise plots all
 3. start_date and end_date: as above
 4. casetype: as above
-5. plottype: "log" or "linear"
+5. proportion: default: False, boolean if you want data divided by population
+6. cumulative: default: True, if you want data summed over days
+7. plottype: "log" or "linear"
 
 ```py
 from pycovid import pycovid
