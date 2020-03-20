@@ -157,24 +157,28 @@ def plot_countries_trend(countries=None, start_date=None, end_date=None, casetyp
 
 
 
-def plot_provinces(country=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], plottype="linear"):
-    
+def plot_provinces(country=None, provinces=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], proportion=False, cumulative=True, plottype="linear"):
+    ylabel = "Cases "
+    title = "Number of confirmed COVID-19 cases over time in " + country[0] 
+
     df = pd.read_csv(country[0] + '_StatePop_19.csv', names=["state", 'population'], skiprows=0)
     province_populations = df.set_index('state').T.to_dict('records')[0]
 
-    df = getCovidCases(countries=country, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True, plotprovinces=True)
+    df = getCovidCases(countries=country, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=cumulative, plotprovinces=True)
     
     if provinces is None:
         provinces = np.unique(df.province_state)
 
-    for province in provinces:
-        print(province)
-        df.loc[df.province_state == province, 'cases'] = (df.loc[df.province_state == province, 'cases'] / province_populations[province]) * 100000
+    if proportion:
+        ylabel = ylabel + "per 100,000 people"
+        title = title + " per 100,000 Citizens"
+        for province in provinces:
+            df.loc[df.province_state == province, 'cases'] = (df.loc[df.province_state == province, 'cases'] / province_populations[province]) * 100000
 
-    fig = px.line(df, x="date", y="cases", color='province_state', title="Number of confirmed COVID-19 cases over time per 100,000 Citizens")
+    fig = px.line(df, x="date", y="cases", color='province_state', title=title)
 
     fig.update_layout(
-        yaxis_title="cases per 100,000 people",
+        yaxis_title=ylabel,
         yaxis = dict(
             showexponent = 'all',
             exponentformat = 'e',
