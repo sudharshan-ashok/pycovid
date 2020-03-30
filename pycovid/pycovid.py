@@ -25,10 +25,20 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
         else: 
             df.cases = df.groupby('country_region')['cases'].transform(pd.Series.cumsum)
 
+
+    iso_df = getIsoDf()           
+    df = pd.merge(df, iso_df, left_on="country_region", right_on='name')
+    print(df)
+    return df
+
+def getIsoDf():
     iso_df = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.csv')
     iso_df = iso_df[['name', 'alpha-3']]
+    
     iso_df.loc[iso_df.name=="United States of America", 'name'] = 'US'
     iso_df.loc[iso_df.name=="United Kingdom", 'name'] = 'UK'
+    iso_df.loc[iso_df.name=="Korea, South", 'name'] = 'South Korea'
+    iso_df.loc[iso_df.name=="United Kingdom of Great Britain and Northern Ireland", 'name'] = 'United Kingdom'
     iso_df.loc[iso_df.name=="Russian Federation", 'name'] = 'Russia'
     iso_df.loc[iso_df.name=="Macao", 'name'] = 'Macau'
     iso_df.loc[iso_df.name=="Taiwan, Province of China", 'name'] = 'Taiwan'
@@ -40,10 +50,8 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
     iso_df.loc[iso_df.name=="Moldova, Republic of", 'name'] = 'Moldova'
     iso_df.loc[iso_df.name=="Ireland", 'name'] = 'Republic of Ireland'
     iso_df.loc[iso_df.name=="Holy See", 'name'] = 'Vatican City'
-               
-    df = pd.merge(df, iso_df, left_on="country_region", right_on='name')
-    print(df)
-    return df
+
+    return iso_df    
 
 def getCovidCasesWide(countries=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], cumsum=False):
     df = pd.read_csv('https://raw.githubusercontent.com/RamiKrispin/coronavirus-csv/master/coronavirus_dataset.csv',
@@ -80,29 +88,8 @@ def getCovidCasesWide(countries=None, start_date=None, end_date=None, casetype=[
         df.recovered = df.groupby('country_region')['recovered'].transform(pd.Series.cumsum)
         df.death = df.groupby('country_region')['death'].transform(pd.Series.cumsum)
         
-        
-
-    iso_df = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.csv')
-    iso_df = iso_df[['name', 'alpha-3']]
-    iso_df.loc[iso_df.name=="United States of America", 'name'] = 'US'
-    iso_df.loc[iso_df.name=="United Kingdom", 'name'] = 'UK'
-    iso_df.loc[iso_df.name=="Russian Federation", 'name'] = 'Russia'
-    iso_df.loc[iso_df.name=="Korea, Republic of", 'name'] = 'South Korea'
-    iso_df.loc[iso_df.name=="Macao", 'name'] = 'Macau'
-    iso_df.loc[iso_df.name=="Taiwan, Province of China", 'name'] = 'Taiwan'
-    iso_df.loc[iso_df.name=="Viet Nam", 'name'] = 'Vietnam'
-    iso_df.loc[iso_df.name=="Iran (Islamic Republic of)", 'name'] = 'Iran'
-    iso_df.loc[iso_df.name=="Czechia", 'name'] = 'Czech Republic'
-    iso_df.loc[iso_df.name=="Saint Barthélemy", 'name'] = 'Saint Barthelemy'
-    iso_df.loc[iso_df.name=="Palestine, State of", 'name'] = 'Palestine'
-    iso_df.loc[iso_df.name=="Moldova, Republic of", 'name'] = 'Moldova'
-    iso_df.loc[iso_df.name=="Ireland", 'name'] = 'Republic of Ireland'
-    iso_df.loc[iso_df.name=="Holy See", 'name'] = 'Vatican City'
-
-
-    
+    iso_df = getIsoDf()  
     df = pd.merge(df, iso_df, left_on="country_region", right_on='name')
-
     return df
 
 def getIntervalData(df, interval='30D'):
@@ -161,8 +148,6 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
     ylabel = "Cases "
     title = "Number of confirmed COVID-19 cases over time in " + country[0] 
 
-    df = pd.read_csv(country[0] + '_StatePop_19.csv', names=["state", 'population'], skiprows=0)
-    province_populations = df.set_index('state').T.to_dict('records')[0]
 
     df = getCovidCases(countries=country, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=cumulative, plotprovinces=True)
     
@@ -170,6 +155,8 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
         provinces = np.unique(df.province_state)
 
     if proportion:
+        df_pop = pd.read_csv(country[0] + '_StatePop_19.csv', names=["state", 'population'], skiprows=0)
+        province_populations = df_pop.set_index('state').T.to_dict('records')[0]
         ylabel = ylabel + "per 100,000 people"
         title = title + " per 100,000 Citizens"
         for province in provinces:
