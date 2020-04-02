@@ -150,9 +150,18 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
 
 
     df = getCovidCases(countries=country, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=cumulative, plotprovinces=True)
-    
+    df = df[df.cases > 100]
+    df['daysFrom100'] = df['date']
+
     if provinces is None:
         provinces = np.unique(df.province_state)
+
+    for province in provinces:
+        temp =  df.loc[df.province_state == province, 'date'] - df.loc[df.province_state == province, 'date'].iloc[0]    
+        temp = temp.astype(int) / 10**9 / 60 / 60 / 24
+        df.loc[df.province_state == province, 'daysFrom100'] = temp
+
+    print(df)
 
     if proportion:
         df_pop = pd.read_csv(country[0] + '_StatePop_19.csv', names=["state", 'population'], skiprows=0)
@@ -162,7 +171,7 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
         for province in provinces:
             df.loc[df.province_state == province, 'cases'] = (df.loc[df.province_state == province, 'cases'] / province_populations[province]) * 100000
 
-    fig = px.line(df, x="date", y="cases", color='province_state', title=title)
+    fig = px.line(df, x="daysFrom100", y="cases", color='province_state', title=title)
 
     fig.update_layout(
         yaxis_title=ylabel,
@@ -172,10 +181,8 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
             type = plottype
         ),
         xaxis = {
-            'tickformat': '%m-%d',
             'tickmode': 'auto',
-            'nticks': 30, 
-            'tick0': start_date,
+            'nticks': 30
         }
     
     )
