@@ -173,59 +173,20 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
 
     fig = px.line(df, x="daysFrom100", y="cases", color='province_state', title=title)
 
-    fig.add_shape(
-        type="line",
-        x0=0,
-        y0=100,
-        x1=7,
-        y1=12800,
-        line=dict(
-            color="Gray",
-            width=2,
-            dash="dot",
+    for multiple in [1, 2, 3, 7]:
+        fig.add_shape(
+            type="line",
+            x0=0,
+            y0=100,
+            x1=7*(multiple),
+            y1=12800,
+            line=dict(
+                color="Gray",
+                width=2,
+                dash="dot",
+            )
         )
-    )
-
-    fig.add_shape(
-        type="line",
-        x0=0,
-        y0=100,
-        x1=14,
-        y1=12800,
-        line=dict(
-            color="Gray",
-            width=2,
-            dash="dot",
-        )
-    )
-
-    fig.add_shape(
-        type="line",
-        x0=0,
-        y0=100,
-        x1=18,
-        y1=6400,
-        line=dict(
-            color="Gray",
-            width=2,
-            dash="dot",
-        )
-    )
-
-    fig.add_shape(
-        type="line",
-        x0=0,
-        y0=100,
-        x1=28,
-        y1=800,
-        line=dict(
-            color="Gray",
-            width=2,
-            dash="dot",
-        )
-    )
-
-
+ 
     fig.update_layout(
         yaxis_title=ylabel,
         yaxis = dict(
