@@ -18,13 +18,12 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
             if country not in df.country_region.values:
                 print("Country: {0} not found in database. Check spelling!".format(country))
             df =  df[(df.country_region.isin(countries))]
-        
+       
     if cumsum is True:
         if plotprovinces:
             df.cases = df.groupby('province_state')['cases'].transform(pd.Series.cumsum)   
         else: 
             df.cases = df.groupby('country_region')['cases'].transform(pd.Series.cumsum)
-
 
     iso_df = getIsoDf()           
     df = pd.merge(df, iso_df, left_on="country_region", right_on='name')
@@ -107,21 +106,28 @@ def plot_countries(df=None, grouped_data=False, metric="confirmed"):
    
     if grouped_data == False:
         df = df.groupby(['country_region', 'alpha-3']).sum().reset_index()
-        
+    
+    df['log_confirmed'] = np.log10(df.confirmed)
     fig = px.choropleth(df, locations="alpha-3",
                     color=metric, # lifeExp is a column of gapminder
                     hover_name="country_region", # column to add to hover information
                     color_continuous_scale="OrRd")
+    
+    fig.update_layout(
+        coloraxis_colorbar=dict(
+        title='log confirmed',
+        exponentformat='none'
+        )
+    )
+    
     fig.show()
     
 
-
-
-def plot_countries_trend(countries=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], plottype="linear"):
+def plot_countries_trend(countries=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], plottype="linear", cumulative=True):
     
   # load in populations 
 
-    df = getCovidCases(countries=countries,  casetype = casetype, start_date=start_date, end_date=end_date, cumsum=True)
+    df = getCovidCases(countries=countries,  casetype = casetype, start_date=start_date, end_date=end_date, cumsum=cumulative)
 
     fig = px.line(df, x="date", y="cases", color='name', title="Number of confirmed COVID-19 cases over time")
 
@@ -148,6 +154,10 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
     ylabel = "Cases "
     title = "Number of confirmed COVID-19 cases over time in " + country[0] 
 
+    if plottype == 'linear':
+        thisRange = [100, 10000]
+    else:
+        thisRange = [2, 4]
 
     df = getCovidCases(countries=country, provinces = provinces, casetype = casetype, start_date=start_date, end_date=end_date, cumsum=cumulative, plotprovinces=True)
     df = df[df.cases > 100]
@@ -173,7 +183,7 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
 
     fig = px.line(df, x="daysFrom100", y="cases", color='province_state', title=title)
 
-    for multiple in [1, 2, 3, 7]:
+    for multiple in [1, 2, 3, 5, 7]:
         fig.add_shape(
             type="line",
             x0=0,
@@ -193,12 +203,12 @@ def plot_provinces(country=None, provinces=None, start_date=None, end_date=None,
             showexponent = 'all',
             exponentformat = 'none',
             type = plottype,
-            range = [2, 4]
+            range = thisRange
         ),
         xaxis = {
             'tickmode': 'auto',
             'nticks': 30,
-            'range': [0, 18]
+            'range': [0, 20]
         }
     )
 
