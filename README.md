@@ -4,6 +4,9 @@ The PyCOVID package provides a Pandas Dataframe of the 2019 Novel Coronavirus CO
 
 <img src="img/covid.jfif" width="100%" align="center"/></a>
 
+## Try in a collaboratory iPython notebook
+<a href="https://colab.research.google.com/github/kylemath/pycovid/blob/master/notebooks/PyCovid_Example_Notebook.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
+
 ### Quick Installation
 
 ```py
@@ -45,6 +48,8 @@ Parameters:
 2. Provinces: List of Provinces and States (Default: All)
 3. start_date and end_date: Use these to set the time window you wish to access
 4. casetype: Python List of Case Types ('confirmed', 'death' and 'recovered' and Default is all) 
+5. cumsum: gets cummulative sum for each country or province
+5. plotprovinces: default is false, if True it cumsums over provinces instead of countries
 
 <img src="img/long.PNG" width="100%" align="center"/></a>
 
@@ -56,11 +61,28 @@ Parameters:
 
 <img src="img/world.PNG" width="100%" align="center"/></a>
 
-**plotProvinces()**: Plot the values from provinces within a country over time
+**plot_countries_trend()**: Plot the cummultive trends over time for countries. Currently doesn't work for any countries with provinces/states (US, Canada, Australia, France).
+1. countries - list of country names
+2. start_date
+3. end_date 
+4. casetype as above,
+5. plottype - linear or log
+
+```py
+from pycovid import pycovid
+
+pycovid.plot_countries_trend(countries=['Iran', 'Italy', 'Spain', 'Portugal', 'Japan', 'Germany', 'Mexico'],
+			casetype=['confirmed'], start_date="2020-01-01", plottype="linear")
+```
+
+**plotProvinces()**: Plot the values from provinces within a country (tested for australia, US, Canada) over time
 1. countries - just include one
-2. provinces - include names of any states or provinces
+2. provinces - optional, include names of any states or provinces, otherwise plots all
 3. start_date and end_date: as above
 4. casetype: as above
+5. proportion: default: False, boolean if you want data divided by population
+6. cumulative: default: True, if you want data summed over days
+7. plottype: "log" or "linear"
 
 ```py
 from pycovid import pycovid
@@ -69,7 +91,7 @@ pycovid.plot_provinces(contries=['Canada'],
 			provinces=['Alberta', 'Ontario', 'Quebec', 
 				'Manitoba', 'British Columbia', 
 				'New Brunswick', 'Saskatchewan'], 
-			casetype=['confirmed'], start_date="2020-02-20")
+			casetype=['confirmed'], start_date="2020-02-20", plottype="linear")
 ```
 
 <img src="img/province.png" width="100%" align="center"/></a>
